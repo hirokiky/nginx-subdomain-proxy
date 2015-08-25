@@ -36,6 +36,7 @@ You can run this container without inheriting Dockerfile, just specify these arg
 * `FROM_HOST_REGEXP`: A regexp for "from host" like (`mydomain\.com`)
 * `TO_HOST`: string for "to host" (`mydomain.private`)
 * `RESOLVER_IP`: IP address for DNS server. If you use privete Route53 within AWS VPC, specify `*.*.*.2` value in your VPC IP range.
+* `X_FORWARDED_PROTO`: Value passed by X_FORWARDED_PROTO header.
 
 and you need to mount `/var/run/docker.sock` at `/tmp/docker.sock` in the container.
 

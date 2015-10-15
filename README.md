@@ -35,6 +35,7 @@ You can run this container without inheriting Dockerfile, just specify these arg
 
 * `FROM_HOST_REGEXP`: A regexp for "from host" like (`mydomain\.com`)
 * `TO_HOST`: string for "to host" (`mydomain.private`)
+    * or `PROXY_PASS`: string for `proxy_pass`. You can use `\$subdomain` variable (The back slash is necessary) like `http://foo-\$subdomain.mydomain.private`. If you specified `TO_HOST`, don't specify this.
 * `RESOLVER_IP`: IP address for DNS server. If you use privete Route53 within AWS VPC, specify `*.*.*.2` value in your VPC IP range.
 * `X_FORWARDED_PROTO`: Value passed by X_FORWARDED_PROTO header.
 

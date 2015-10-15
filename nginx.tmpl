@@ -8,7 +8,12 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Proto {{ $.Env.X_FORWARDED_PROTO }};
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        {{ if $.Env.TO_HOST }}
         proxy_pass http://$subdomain.{{ $.Env.TO_HOST }};
+        {{ end }}
+        {{ if $.Env.PROXY_PASS }}
+        proxy_pass {{ $.Env.PROXY_PASS }};
+        {{ end }}
     }
 }
 

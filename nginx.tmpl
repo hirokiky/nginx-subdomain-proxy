@@ -3,7 +3,7 @@ server {
     server_name ~^(?P<subdomain>.+)\.{{ $.Env.FROM_HOST_REGEXP }}$;
 
     location / {
-        resolver {{ $.Env.RESOLVER_IP }};
+        resolver {{ $.Env.RESOLVER_IP }}{{ if $.Env.RESOLVER_VALID_SEC }} valid={{ $.Env.RESOLVER_VALID_SEC }}s{{ end }};
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Proto {{ $.Env.X_FORWARDED_PROTO }};

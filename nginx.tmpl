@@ -2,11 +2,20 @@ server {
     listen 80;
     server_name ~^(?P<subdomain>.+)\.{{ $.Env.FROM_HOST_REGEXP }}$;
 
+    set $proxy_proto "";
+    if ($http_x_forwarded_proto != "") {
+        set $proxy_proto $http_x_forwarded_proto;
+    }
+
+    if ($http_x_forwarded_proto = "") {
+        set $proxy_proto "{{ $.Env.X_FORWARDED_PROTO }}";
+    }
+
     location / {
         resolver {{ $.Env.RESOLVER_IP }}{{ if $.Env.RESOLVER_VALID_SEC }} valid={{ $.Env.RESOLVER_VALID_SEC }}s{{ end }};
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Proto {{ $.Env.X_FORWARDED_PROTO }};
+        proxy_set_header X-Forwarded-Proto $proxy_proto;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         {{ if $.Env.TO_HOST }}
         proxy_pass http://$subdomain.{{ $.Env.TO_HOST }};

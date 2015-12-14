@@ -2,6 +2,12 @@ server {
     listen 80;
     server_name ~^(?P<subdomain>.+)\.{{ $.Env.FROM_HOST_REGEXP }}$;
 
+    {{ if $.Env.IGNORE_HTTP }}
+    if ($http_x_forwarded_proto = "http") {
+        return 301 https://$host$request_uri;
+    }
+    {{ end }}
+
     gzip  on;
     gzip_proxied  any;
     gzip_vary  on;
@@ -32,7 +38,7 @@ server {
         proxy_set_header X-Forwarded-Proto $proxy_proto;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         {{ if $.Env.TO_HOST }}
-        proxy_pass http://$subdomain.{{ $.Env.TO_HOST }};
+        proxy_pass https://$subdomain.{{ $.Env.TO_HOST }};
         {{ end }}
         {{ if $.Env.PROXY_PASS }}
         proxy_pass {{ $.Env.PROXY_PASS }};

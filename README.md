@@ -39,6 +39,7 @@ You can run this container without inheriting Dockerfile, just specify these arg
 * `RESOLVER_IP`: IP address for DNS server. If you use privete Route53 within AWS VPC, specify `*.*.*.2` value in your VPC IP range.
 * `RESOLVER_VALID_SEC`: Integer for available seconds of caching DNS records. By default it will cache forever.
 * `X_FORWARDED_PROTO`: Value passed by X_FORWARDED_PROTO header (If `X-Forwarded-Proto` was not specified by client).
+* `IGNORE_HTTP`: If specified `IGNORE_HTTP=1` and `X-Forwarded-Proto` was `http` , the server will redirect to https://...
 
 and you need to mount `/var/run/docker.sock` at `/tmp/docker.sock` in the container.
 

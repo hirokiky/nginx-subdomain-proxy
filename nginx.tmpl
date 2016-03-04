@@ -1,3 +1,17 @@
+# http://stackoverflow.com/questions/29645390/rate-limit-in-nginx-based-on-http-header
+
+{{ if $.Env.LIMIT_NON_AUTHZ }}
+map $http_authorization $limit {
+    default "";  # Empty string won't be limited
+    "" $http_x_forwarded_for;  # If Authorization header is empty, limit by using XFF header.
+}
+
+# X-Forwarded-For: 7,80 bytes
+# 10 * 1024 * 1024 / 70 = 131072 non X-Forwarded-For user/s can be counted
+limit_req_zone $limit zone=nonauthz:100m rate={{ if $.Env.LIMIT_RATE }}{{ $.Env.LIMIT_RATE }}{{ else }}1000r/s{{ end }};
+limit_req_status 429;
+{{ end }}
+
 server {
     listen 80;
     server_name ~^(?P<subdomain>.+)\.{{ $.Env.FROM_HOST_REGEXP }}$;
@@ -6,6 +20,10 @@ server {
     if ($http_x_forwarded_proto = "http") {
         return 301 https://$host$request_uri;
     }
+    {{ end }}
+
+    {{ if $.Env.LIMIT_NON_AUTHZ }}
+    limit_req zone=nonauthz;
     {{ end }}
 
     gzip  on;

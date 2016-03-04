@@ -40,6 +40,8 @@ You can run this container without inheriting Dockerfile, just specify these arg
 * `RESOLVER_VALID_SEC`: Integer for available seconds of caching DNS records. By default it will cache forever.
 * `X_FORWARDED_PROTO`: Value passed by X_FORWARDED_PROTO header (If `X-Forwarded-Proto` was not specified by client).
 * `IGNORE_HTTP`: If specified `IGNORE_HTTP=1` and `X-Forwarded-Proto` was `http` , the server will redirect to https://...
+* `LIMIT_NON_AUTHZ`: Set `1` if you want to limit requests without Authorization Header by X-Forwarded-For
+    * `LIMIT_RATE`: Set value for the `rate` argument of `limit_req_zone`. The default value is '1000r/s'. See http://nginx.org/en/docs/http/ngx_http_limit_req_module.html
 
 and you need to mount `/var/run/docker.sock` at `/tmp/docker.sock` in the container.
 

@@ -1,4 +1,4 @@
-FROM nginx:1.9
+FROM nginx:1.10
 MAINTAINER Hiroki Kiyohara hirokiky@gmail.com
 
 # Install wget and install/updates certificates
